@@ -12,6 +12,14 @@ public class PlayerFallState : PlayerState
     {
         base.LogicUpdate();
 
+        // Coyote-time jump check
+        if (player.InputHandler.JumpInput && player.CanCoyoteJump())
+        {
+            player.ResetCoyoteTimer();
+            stateMachine.ChangeState(player.JumpState);
+            return;
+        }
+
         // Air movement
         int xInput = player.InputHandler.NormalizedInputX;
         player.MovementHandler.CheckIfShouldFlip(xInput);

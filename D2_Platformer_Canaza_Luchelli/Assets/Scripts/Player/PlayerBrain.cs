@@ -31,6 +31,7 @@ public class PlayerBrain : MonoBehaviour
     public PlayerSettingsSo PlayerSettings => playerSettings;
 
     public int FacingDirection { get; private set; } = 1;
+    private float coyoteTimer;
 
     private void Awake()
     {
@@ -57,6 +58,16 @@ public class PlayerBrain : MonoBehaviour
     private void Update()
     {
         StateMachine.CurrentState?.LogicUpdate();
+        
+        // Coyote time control
+        if (CheckIfGrounded())
+        {
+            coyoteTimer = PlayerSettings.coyoteTime;
+        }
+        else
+        {
+            coyoteTimer -= Time.deltaTime;
+        }
     }
 
     private void FixedUpdate()
@@ -80,4 +91,14 @@ public class PlayerBrain : MonoBehaviour
     {
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
     }
+
+    /// <summary>
+    /// Evaluates if the player is within the grace period to execute a jump after leaving a ledge.
+    /// </summary>
+    public bool CanCoyoteJump() => coyoteTimer > 0f;
+
+    /// <summary>
+    /// Consumes the coyote time so it cannot be reused in the same airborne session.
+    /// </summary>
+    public void ResetCoyoteTimer() => coyoteTimer = 0f;
 }

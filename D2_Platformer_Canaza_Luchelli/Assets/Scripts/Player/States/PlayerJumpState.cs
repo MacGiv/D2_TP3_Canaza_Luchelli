@@ -11,6 +11,8 @@ public class PlayerJumpState : PlayerState
     public override void Enter()
     {
         base.Enter();
+
+        player.ResetCoyoteTimer();
         // Apply force and consume input
         player.MovementHandler.SetVelocity(player.RB.linearVelocity.x, player.PlayerSettings.jumpForce);
         player.InputHandler.UseJumpInput();
