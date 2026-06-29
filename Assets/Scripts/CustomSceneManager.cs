@@ -15,6 +15,9 @@ public class CustomSceneManager : MonoBehaviour, IService
     /// </summary>
     public List<string> currentScenes = new List<string>();
 
+    /// <summary>
+    /// Initializes the scene manager and caches the scene settings.
+    /// </summary>
     public void Initialize(GameSettingsSo settingsSo)
     {
         this.settingsSo = settingsSo.SceneSettingsSo;
@@ -45,7 +48,6 @@ public class CustomSceneManager : MonoBehaviour, IService
             {
                 currentScenes.Remove(unloadSceneName);
             }
-
             yield return SceneManager.UnloadSceneAsync(unloadSceneName);
             yield return null; // Frame extra for Garbage Collector just in case
         }
@@ -64,5 +66,8 @@ public class CustomSceneManager : MonoBehaviour, IService
         Debug.Log($"CustomSceneManager: Transition successfully made to: {loadSceneName}");
     }
 
+    /// <summary>
+    /// Deinitializes the service and destroys the attached GameObject.
+    /// </summary>
     public void DeInitialize() => Destroy(gameObject);
 }
