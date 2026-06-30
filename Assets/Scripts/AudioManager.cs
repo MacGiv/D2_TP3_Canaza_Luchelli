@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 /// <summary>
-/// Handles all the audio playback, including music and sound effects.
+/// Handles all audio playback in the game. Registered in the ServiceLocator.
 /// </summary>
 public class AudioManager : MonoBehaviour, IService
 {
@@ -19,12 +20,12 @@ public class AudioManager : MonoBehaviour, IService
         EventBus.Subscribe<SfxRequestedEvent>(OnSFXRequested);
     }
 
-    /// <summary>
-    /// Performs a generic action for testing purposes.
-    /// </summary>
-    public void DoSomething()
+    private void Awake()
     {
-        Debug.Log("AudioManager doing something");
+        bgmSource = gameObject.AddComponent<AudioSource>();
+        bgmSource.loop = true;
+        bgmSource.playOnAwake = false;
+        bgmSource.volume = 1f;
     }
 
     /// <summary>
