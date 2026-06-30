@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 /// </summary>
 public class AudioManager : MonoBehaviour, IService
 {
+    private AudioSource bgmSource;
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
 
@@ -36,6 +37,21 @@ public class AudioManager : MonoBehaviour, IService
         EventBus.Unsubscribe<SfxRequestedEvent>(OnSFXRequested);
 
         Destroy(gameObject);
+    }
+
+    public void PlayBGM(AudioClip newClip)
+    {
+        if (newClip == null) return;
+        if (bgmSource.clip == newClip && bgmSource.isPlaying) return;
+
+        bgmSource.Stop();
+        bgmSource.clip = newClip;
+        bgmSource.Play();
+    }
+
+    public void StopBGM()
+    {
+        bgmSource.Stop();
     }
 
     private void OnSFXRequested(SfxRequestedEvent sfxRequestedEvent) 
