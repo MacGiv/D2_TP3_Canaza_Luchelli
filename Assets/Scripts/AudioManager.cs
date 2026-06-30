@@ -1,25 +1,50 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 /// <summary>
-/// Handles all the audio playback, including music and sound effects.
+/// Handles all audio playback in the game. Registered in the ServiceLocator.
 /// </summary>
 public class AudioManager : MonoBehaviour, IService
 {
-    /// <summary>
-    /// Initializes the service with the provided game settings.
-    /// </summary>
-    public void Initialize(GameSettingsSo settingsSo) { }
+    private AudioSource bgmSource;
 
-    /// <summary>
-    /// Performs a generic action for testing purposes.
-    /// </summary>
-    public void DoSomething()
+    private void Awake()
     {
-        Debug.Log("AudioManager doing something");
+        bgmSource = gameObject.AddComponent<AudioSource>();
+        bgmSource.loop = true;
+        bgmSource.playOnAwake = false;
+        bgmSource.volume = 1f;
     }
 
-    /// <summary>
-    /// Deinitializes the service and destroys the attached GameObject.
-    /// </summary>
-    public void DeInitialize() => Destroy(gameObject);
+    public void PlayBGM(AudioClip newClip)
+    {
+        if (newClip == null) return;
+        if (bgmSource.clip == newClip && bgmSource.isPlaying) return;
+
+        bgmSource.Stop();
+        bgmSource.clip = newClip;
+        bgmSource.Play();
+    }
+
+    public void StopBGM()
+    {
+        bgmSource.Stop();
+    }
+
+    public void Initialize(GameSettingsSo settingsSo)
+    {
+        if (settingsSo.BGMMixerGroup != null)
+        {
+            bgmSource.outputAudioMixerGroup = settingsSo.BGMMixerGroup;
+        }
+        else
+        {
+            Debug.LogWarning("AudioManager: BGMMixerGroup not assigned.");
+        }
+    }
+
+    public void DeInitialize()
+    {
+        Destroy(gameObject);
+    }
 }

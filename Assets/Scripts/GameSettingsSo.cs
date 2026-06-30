@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 /// <summary>
 /// The master settings object.
@@ -11,6 +12,7 @@ public class GameSettingsSo : ScriptableObject
     public PlayerSettingsSo PlayerSettingsSo;
     public SceneSettingsSo SceneSettingsSo;
     public List<EnemySettingsSo> EnemySettingsSo = new List<EnemySettingsSo>();
+    public AudioMixerGroup BGMMixerGroup;
 
     /// <summary>
     /// Initializes all sub-settings objects.
